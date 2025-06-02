@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D PDF Book Mockup</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        #canvas-container { 
+            width: 100%; 
+            height: 420px; /* Slightly adjusted height for zoom buttons */
+            background-color: #f0f0f0; 
+            border-radius: 0.5rem; 
+            overflow: hidden; 
+            margin-bottom: 0.75rem; /* Added margin-bottom */
+        }
+        canvas { display: block; }
+        .custom-loader {
+            border: 4px solid #f3f3f3; /* Light grey */
+            border-top: 4px solid #3498db; /* Blue */
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col items-center justify-center p-4">
+
+    <div class="bg-white p-6 sm:p-8 rounded-lg shadow-xl w-full max-w-2xl">
+        <h1 class="text-2xl sm:text-3xl font-bold text-center text-gray-700 mb-6">3D PDF Book Mockup Generator</h1>
+
+        <div class="mb-6">
+            <label for="pdf-upload" class="block mb-2 text-sm font-medium text-gray-900">Upload PDF:</label>
+            <input type="file" id="pdf-upload" accept=".pdf" class="block w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer focus:outline-none focus:border-blue-500 p-2.5">
+        </div>
+
+        <div id="status-message" class="text-center text-gray-600 mb-4 min-h-[24px]">
+            Please upload a PDF file to generate the mockup.
+        </div>
+        
+        <div id="loader" class="custom-loader hidden"></div>
+
+        <div id="canvas-container" class="rounded-md shadow-inner bg-slate-200">
+            </div>
+
+        <div class="flex justify-center space-x-3 mb-4">
+            <button id="zoom-in-btn" title="Zoom In" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold py-2 px-4 rounded-lg text-sm transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-zoom-in inline-block mr-1" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11M13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0"/>
+                    <path d="M10.344 11.742c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1 6.538 6.538 0 0 1-1.398 1.4z"/>
+                    <path fill-rule="evenodd" d="M6.5 3a.5.5 0 0 1 .5.5V6h2.5a.5.5 0 0 1 0 1H7v2.5a.5.5 0 0 1-1 0V7H3.5a.5.5 0 0 1 0-1H6V3.5a.5.5 0 0 1 .5-.5"/>
+                </svg> Zoom In
+            </button>
+            <button id="zoom-out-btn" title="Zoom Out" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold py-2 px-4 rounded-lg text-sm transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-zoom-out inline-block mr-1" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11M13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0"/>
+                    <path d="M10.344 11.742c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1 6.538 6.538 0 0 1-1.398 1.4z"/>
+                    <path fill-rule="evenodd" d="M3 6.5a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5"/>
+                </svg> Zoom Out
+            </button>
+        </div>
+
+        <div class="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
+            <h2 class="text-lg font-semibold text-gray-700 mb-3">Export Options</h2>
+            <div class="flex flex-col sm:flex-row sm:items-end sm:space-x-4 space-y-3 sm:space-y-0">
+                <div class="flex-grow">
+                    <label for="resolution-multiplier" class="block mb-1 text-sm font-medium text-gray-900">Resolution Multiplier:</label>
+                    <select id="resolution-multiplier" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                        <option value="1">1x (Original)</option>
+                        <option value="2">2x</option>
+                        <option value="3">3x</option>
+                        <option value="4">4x</option>
+                        <option value="5">5x</option>
+                    </select>
+                </div>
+                <button id="export-png" class="w-full sm:w-auto bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2.5 px-4 rounded-lg transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">Export as PNG</button>
+                <button id="export-jpg" class="w-full sm:w-auto bg-green-500 hover:bg-green-600 text-white font-semibold py-2.5 px-4 rounded-lg transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">Export as JPG</button>
+            </div>
+        </div>
+        
+        <p class="text-xs text-gray-500 text-center mt-6">
+            Powered by Three.js and PDF.js. Rotate the book using your mouse.
+        </p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.worker.min.js';
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+    <script type="module">
+        // --- Global Variables ---
+        let scene, camera, renderer, bookMesh, controls;
+        const canvasContainer = document.getElementById('canvas-container');
+        const pdfUpload = document.getElementById('pdf-upload');
+        const statusMessage = document.getElementById('status-message');
+        const loader = document.getElementById('loader');
+        
+        const exportPNGButton = document.getElementById('export-png');
+        const exportJPGButton = document.getElementById('export-jpg');
+        const resolutionMultiplierSelect = document.getElementById('resolution-multiplier');
+        
+        const zoomInButton = document.getElementById('zoom-in-btn');
+        const zoomOutButton = document.getElementById('zoom-out-btn');
+
+        const TEXTURE_MAX_DIMENSION = 1024; 
+        const BOOK_ASPECT_RATIO_REFERENCE_HEIGHT = 10; 
+
+        // --- Initialization ---
+        function initThreeJS() {
+            // Scene
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0xf0f0f0); 
+
+            // Camera
+            const aspectRatio = canvasContainer.clientWidth / canvasContainer.clientHeight;
+            camera = new THREE.PerspectiveCamera(75, aspectRatio, 0.1, 1000);
+            camera.position.set(5, 7, 15); 
+
+            // Renderer
+            renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+            renderer.setSize(canvasContainer.clientWidth, canvasContainer.clientHeight);
+            renderer.setPixelRatio(window.devicePixelRatio); 
+            canvasContainer.appendChild(renderer.domElement);
+
+            // Lighting
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.7); 
+            scene.add(ambientLight);
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8); 
+            directionalLight.position.set(5, 10, 7.5);
+            scene.add(directionalLight);
+
+            // Controls
+            if (typeof THREE.OrbitControls !== 'function') {
+                console.error('THREE.OrbitControls is not defined. OrbitControls.js might not have loaded correctly.');
+                statusMessage.textContent = "Error: Camera controls library not found.";
+                updateButtonStates(true);
+                return; 
+            }
+
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            
+            // Log if dollyIn/dollyOut are missing for debugging, but we won't use them directly.
+            if (!(controls && typeof controls.dollyIn === 'function' && typeof controls.dollyOut === 'function')) {
+                console.warn('OrbitControls instance does not have dollyIn/dollyOut methods. Using manual zoom.');
+            }
+
+
+            controls.enableDamping = true; 
+            controls.dampingFactor = 0.05;
+            controls.screenSpacePanning = false;
+            controls.minDistance = 2; 
+            controls.maxDistance = 60; 
+            controls.maxPolarAngle = Math.PI / 1.8; 
+
+            // Initial render
+            animate();
+            
+            window.addEventListener('resize', onWindowResize, false);
+            updateButtonStates(); 
+        }
+
+        function onWindowResize() {
+            if (!renderer || !camera || !canvasContainer) return;
+            if (canvasContainer.clientWidth === 0 || canvasContainer.clientHeight === 0) return;
+
+            const newWidth = canvasContainer.clientWidth;
+            const newHeight = canvasContainer.clientHeight;
+
+            camera.aspect = newWidth / newHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(newWidth, newHeight);
+        }
+
+        // --- PDF Page to Image Data URL ---
+        async function getPageAsImageDataUrl(pdfPage) {
+            const viewport = pdfPage.getViewport({ scale: 1 });
+            const scale = Math.min(TEXTURE_MAX_DIMENSION / viewport.width, TEXTURE_MAX_DIMENSION / viewport.height, 1.5);
+            const scaledViewport = pdfPage.getViewport({ scale: scale });
+
+            const tempCanvas = document.createElement('canvas');
+            tempCanvas.width = scaledViewport.width;
+            tempCanvas.height = scaledViewport.height;
+            const context = tempCanvas.getContext('2d');
+
+            await pdfPage.render({ canvasContext: context, viewport: scaledViewport }).promise;
+            return {
+                url: tempCanvas.toDataURL(),
+                aspectRatio: scaledViewport.width / scaledViewport.height
+            };
+        }
+
+        // --- PDF Processing & Book Creation ---
+        async function handlePDFUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            statusMessage.textContent = 'Processing PDF...';
+            loader.classList.remove('hidden');
+            updateButtonStates(true); 
+
+
+            if (bookMesh) {
+                scene.remove(bookMesh);
+                if (bookMesh.geometry) bookMesh.geometry.dispose();
+                if (bookMesh.material) {
+                    if (Array.isArray(bookMesh.material)) {
+                        bookMesh.material.forEach(mat => {
+                            if (mat.map) mat.map.dispose();
+                            mat.dispose();
+                        });
+                    } else {
+                        if (bookMesh.material.map) bookMesh.material.map.dispose();
+                        bookMesh.material.dispose();
+                    }
+                }
+                bookMesh = null;
+            }
+
+            try {
+                const arrayBuffer = await file.arrayBuffer();
+                const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+                
+                if (pdf.numPages === 0) {
+                    throw new Error("PDF has no pages.");
+                }
+
+                const firstPage = await pdf.getPage(1);
+                const { url: coverImageDataUrl, aspectRatio: pageAspectRatio } = await getPageAsImageDataUrl(firstPage);
+
+                let backCoverImageDataUrl = coverImageDataUrl; 
+                if (pdf.numPages > 1) {
+                    try {
+                        const lastPage = await pdf.getPage(pdf.numPages);
+                        const { url: lastPageUrl } = await getPageAsImageDataUrl(lastPage);
+                        backCoverImageDataUrl = lastPageUrl;
+                    } catch (e) {
+                        console.warn("Could not process last page for back cover, using front cover image instead.", e);
+                    }
+                }
+                
+                createBook(coverImageDataUrl, backCoverImageDataUrl, pdf.numPages, pageAspectRatio);
+                statusMessage.textContent = 'PDF processed. Rotate/Zoom the book. Ready to export.';
+                updateButtonStates(false); 
+
+            } catch (error) {
+                console.error('Error processing PDF:', error);
+                statusMessage.textContent = `Error: ${error.message || 'Could not process PDF.'}`;
+                if (bookMesh) scene.remove(bookMesh);
+                updateButtonStates(true); 
+            } finally {
+                loader.classList.add('hidden');
+            }
+        }
+
+        function createBook(coverTextureUrl, backCoverTextureUrl, numPages, pageAspectRatio) {
+            const bookHeight = BOOK_ASPECT_RATIO_REFERENCE_HEIGHT;
+            const bookWidth = bookHeight * pageAspectRatio;
+            const bookThickness = Math.max(0.3, Math.min(numPages / 80, bookHeight * 0.25)); 
+
+            const textureLoader = new THREE.TextureLoader();
+            
+            const coverTexture = textureLoader.load(coverTextureUrl, () => {
+                if (bookMesh && bookMesh.material[4] && bookMesh.material[4].map) bookMesh.material[4].map.needsUpdate = true;
+            });
+            coverTexture.colorSpace = THREE.SRGBColorSpace;
+
+            const backTexture = textureLoader.load(backCoverTextureUrl, () => {
+                 if (bookMesh && bookMesh.material[5] && bookMesh.material[5].map) bookMesh.material[5].map.needsUpdate = true;
+            });
+            backTexture.colorSpace = THREE.SRGBColorSpace;
+
+            const frontCoverMaterial = new THREE.MeshStandardMaterial({ 
+                map: coverTexture, roughness: 0.7, metalness: 0.1 
+            });
+            const backCoverMaterial = new THREE.MeshStandardMaterial({ 
+                map: backTexture, roughness: 0.7, metalness: 0.1 
+            }); 
+            const pageMaterial = new THREE.MeshStandardMaterial({ 
+                color: 0xfff8e7, roughness: 0.9, side: THREE.DoubleSide 
+            });
+
+            const materials = [
+                pageMaterial, pageMaterial, pageMaterial, pageMaterial,
+                frontCoverMaterial, backCoverMaterial  
+            ];
+
+            const bookGeometry = new THREE.BoxGeometry(bookWidth, bookHeight, bookThickness);
+            bookMesh = new THREE.Mesh(bookGeometry, materials);
+            scene.add(bookMesh);
+        }
+
+        // --- Export Functionality ---
+        function exportScene(format = 'png', userSelectedMultiplier = 1) {
+            if (!bookMesh || !renderer || !scene || !camera) {
+                statusMessage.textContent = 'Please generate a book mockup first.';
+                return;
+            }
+            const actualRenderMultiplier = userSelectedMultiplier * 2; 
+            statusMessage.textContent = `Exporting ${format.toUpperCase()} at ${userSelectedMultiplier}x quality...`; 
+            loader.classList.remove('hidden');
+            updateButtonStates(true);
+
+            setTimeout(() => {
+                try {
+                    const originalWidth = canvasContainer.clientWidth;
+                    const originalHeight = canvasContainer.clientHeight;
+                    
+                    const exportWidth = originalWidth * actualRenderMultiplier;
+                    const exportHeight = originalHeight * actualRenderMultiplier;
+                    
+                    const originalAspect = camera.aspect;
+                    const originalPixelRatio = renderer.getPixelRatio();
+
+                    renderer.setPixelRatio(1); 
+                    renderer.setSize(exportWidth, exportHeight, false); 
+                    camera.aspect = exportWidth / exportHeight;
+                    camera.updateProjectionMatrix();
+                    
+                    if(controls) controls.update(); 
+                    renderer.render(scene, camera); 
+
+                    const mimeType = format === 'png' ? 'image/png' : 'image/jpeg';
+                    const imageDataUrl = renderer.domElement.toDataURL(mimeType, format === 'jpeg' ? 0.92 : undefined);
+
+                    renderer.setPixelRatio(originalPixelRatio);
+                    renderer.setSize(originalWidth, originalHeight, false);
+                    camera.aspect = originalAspect;
+                    camera.updateProjectionMatrix();
+                    
+                    if(controls) controls.update(); 
+                    renderer.render(scene, camera); 
+
+                    const link = document.createElement('a');
+                    link.href = imageDataUrl;
+                    link.download = `book-mockup-${Date.now()}.${format === 'jpeg' ? 'jpg' : 'png'}`;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    statusMessage.textContent = `Exported successfully at ${userSelectedMultiplier}x quality!`;
+                } catch (e) {
+                    console.error("Export failed:", e);
+                    statusMessage.textContent = `Export failed: ${e.message}. Try a lower resolution.`;
+                    const originalWidth = canvasContainer.clientWidth;
+                    const originalHeight = canvasContainer.clientHeight;
+                     if (renderer && camera && originalWidth && originalHeight) {
+                        renderer.setPixelRatio(window.devicePixelRatio);
+                        renderer.setSize(originalWidth, originalHeight, false);
+                        camera.aspect = originalWidth / originalHeight;
+                        camera.updateProjectionMatrix();
+                        renderer.render(scene, camera);
+                    }
+                } finally {
+                    loader.classList.add('hidden');
+                    updateButtonStates(bookMesh === null); 
+                }
+            }, 50); 
+        }
+
+        // --- Button State Management ---
+        function updateButtonStates(isProcessingOrError = false) {
+            const bookExists = !!bookMesh;
+            const disableExport = isProcessingOrError || !bookExists;
+            const disableZoom = isProcessingOrError || !controls; 
+
+            exportPNGButton.disabled = disableExport;
+            exportJPGButton.disabled = disableExport;
+            
+            zoomInButton.disabled = disableZoom;
+            zoomOutButton.disabled = disableZoom;
+        }
+
+
+        // --- Animation Loop ---
+        function animate() {
+            requestAnimationFrame(animate);
+            if (controls) controls.update(); 
+            if (renderer && scene && camera) renderer.render(scene, camera);
+        }
+
+        // --- Event Listeners ---
+        pdfUpload.addEventListener('change', handlePDFUpload);
+        
+        exportPNGButton.addEventListener('click', () => {
+            const multiplier = parseFloat(resolutionMultiplierSelect.value);
+            exportScene('png', multiplier);
+        });
+
+        exportJPGButton.addEventListener('click', () => {
+            const multiplier = parseFloat(resolutionMultiplierSelect.value);
+            exportScene('jpeg', multiplier);
+        });
+
+        // --- Manual Dolly Zoom Implementation ---
+        function manualDollyZoom(zoomIn) {
+            if (!controls || !camera) {
+                console.error("Cannot zoom: controls or camera not initialized.");
+                statusMessage.textContent = "Zoom function is currently unavailable.";
+                return;
+            }
+
+            const toCamera = new THREE.Vector3().subVectors(camera.position, controls.target);
+            const currentDistance = toCamera.length();
+            let newDistance;
+
+            if (zoomIn) {
+                newDistance = Math.max(controls.minDistance, currentDistance * 0.85); // Zoom in by 15%
+            } else {
+                newDistance = Math.min(controls.maxDistance, currentDistance * 1.15); // Zoom out by 15%
+            }
+
+            if (currentDistance.toFixed(5) === newDistance.toFixed(5)) { // Avoid tiny changes if at min/max
+                return;
+            }
+
+            toCamera.setLength(newDistance);
+            camera.position.copy(controls.target).add(toCamera);
+            controls.update(); // Crucial for OrbitControls to recognize the change
+        }
+
+
+        zoomInButton.addEventListener('click', () => {
+            manualDollyZoom(true);
+        });
+
+        zoomOutButton.addEventListener('click', () => {
+            manualDollyZoom(false);
+        });
+
+        // --- Start ---
+        document.addEventListener('DOMContentLoaded', () => {
+            if (canvasContainer.clientWidth > 0 && canvasContainer.clientHeight > 0) {
+                initThreeJS();
+            } else {
+                console.warn("Canvas container has zero dimensions on DOMContentLoaded. Attempting deferred initialization.");
+                setTimeout(() => {
+                     if (canvasContainer.clientWidth > 0 && canvasContainer.clientHeight > 0) {
+                        initThreeJS();
+                     } else {
+                        console.error("Error: Canvas container still not properly sized after delay.");
+                        statusMessage.textContent = "Error: Canvas container not properly sized.";
+                        updateButtonStates(true); 
+                     }
+                }, 100);
+            }
+            if (!statusMessage.textContent.startsWith("Error:")) {
+                statusMessage.textContent = 'Upload a PDF to see the 3D mockup.';
+            }
+            updateButtonStates(true); 
+        });
+
+    </script>
+</body>
+</html>
