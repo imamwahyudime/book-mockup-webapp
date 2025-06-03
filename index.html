@@ -9,7 +9,7 @@
         body { font-family: 'Inter', sans-serif; }
         #canvas-container { 
             width: 100%; 
-            height: 400px; /* Adjusted height */
+            height: 400px; 
             background-color: #f0f0f0; 
             border-radius: 0.5rem; 
             overflow: hidden; 
@@ -17,87 +17,35 @@
         }
         canvas { display: block; }
         .custom-loader {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #3498db;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
+            border: 4px solid #f3f3f3; border-top: 4px solid #3498db; border-radius: 50%;
+            width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 20px auto;
         }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        .control-button-group {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .control-button-group { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem; margin-bottom: 1rem; }
         .control-button {
-            background-color: #e2e8f0; 
-            color: #334155; 
-            font-weight: 600; 
-            padding: 0.5rem 1rem; 
-            border-radius: 0.5rem; 
-            font-size: 0.875rem; 
-            transition: background-color 0.15s ease-in-out;
+            background-color: #e2e8f0; color: #334155; font-weight: 600; padding: 0.5rem 1rem; 
+            border-radius: 0.5rem; font-size: 0.875rem; transition: background-color 0.15s ease-in-out;
         }
-        .control-button:hover {
-            background-color: #cbd5e1;
-        }
-        .control-button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        .control-button svg {
-            display: inline-block;
-            margin-right: 0.25rem;
-            width: 1em; 
-            height: 1em;
-        }
+        .control-button:hover { background-color: #cbd5e1; }
+        .control-button:disabled { opacity: 0.5; cursor: not-allowed; }
+        .control-button svg { display: inline-block; margin-right: 0.25rem; width: 1em; height: 1em; }
         .feature-section {
-            margin-top: 1rem;
-            padding: 1rem;
-            background-color: #f9fafb; /* gray-50 */
-            border: 1px solid #e5e7eb; /* gray-200 */
-            border-radius: 0.5rem; /* rounded-lg */
+            margin-top: 1rem; padding: 1rem; background-color: #f9fafb; 
+            border: 1px solid #e5e7eb; border-radius: 0.5rem;
         }
-        .feature-section h3 {
-            font-size: 1rem; /* text-base */
-            font-weight: 600; /* semibold */
-            color: #374151; /* gray-700 */
-            margin-bottom: 0.75rem;
+        .feature-section h3 { font-size: 1rem; font-weight: 600; color: #374151; margin-bottom: 0.75rem; }
+        .input-group { margin-bottom: 0.75rem; }
+        .input-group label { display: block; margin-bottom: 0.25rem; font-size: 0.875rem; font-weight: 500; color: #374151; }
+        .input-group select, .input-group input[type="color"], .input-group input[type="file"], .input-group input[type="text"] {
+            width: 100%; padding: 0.5rem; border-radius: 0.375rem; 
+            border: 1px solid #d1d5db; font-size: 0.875rem;
         }
-        .input-group {
-            margin-bottom: 0.75rem;
-        }
-        .input-group label {
-            display: block;
-            margin-bottom: 0.25rem;
-            font-size: 0.875rem; /* text-sm */
-            font-weight: 500; /* medium */
-            color: #374151; /* gray-700 */
-        }
-        .input-group select, .input-group input[type="color"], .input-group input[type="file"] {
-            width: 100%;
-            padding: 0.5rem;
-            border-radius: 0.375rem; /* rounded-md */
-            border: 1px solid #d1d5db; /* gray-300 */
-            font-size: 0.875rem;
-        }
-        .input-group input[type="checkbox"] {
-            margin-right: 0.5rem;
-            accent-color: #3b82f6; /* blue-500 */
-        }
-
+        .input-group input[type="checkbox"] { margin-right: 0.5rem; accent-color: #3b82f6; }
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col items-center justify-center p-4">
 
-    <div class="bg-white p-6 sm:p-8 rounded-lg shadow-xl w-full max-w-3xl"> 
+    <div class="bg-white p-6 sm:p-8 rounded-lg shadow-xl w-full max-w-3xl">
         <h1 class="text-2xl sm:text-3xl font-bold text-center text-gray-700 mb-6">3D PDF Book Mockup Generator</h1>
 
         <div class="mb-6">
@@ -105,24 +53,14 @@
             <input type="file" id="pdf-upload" accept=".pdf" class="block w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer focus:outline-none focus:border-blue-500 p-2.5">
         </div>
 
-        <div id="status-message" class="text-center text-gray-600 mb-4 min-h-[24px]">
-            Please upload a PDF file to generate the mockup.
-        </div>
-        
+        <div id="status-message" class="text-center text-gray-600 mb-4 min-h-[24px]">Please upload a PDF.</div>
         <div id="loader" class="custom-loader hidden"></div>
-
-        <div id="canvas-container" class="rounded-md shadow-inner bg-slate-200">
-        </div>
+        <div id="canvas-container" class="rounded-md shadow-inner bg-slate-200"></div>
 
         <div class="control-button-group">
-            <button id="zoom-in-btn" title="Zoom In" class="control-button">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11M13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0"/><path d="M10.344 11.742c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1 6.538 6.538 0 0 1-1.398 1.4z"/><path fill-rule="evenodd" d="M6.5 3a.5.5 0 0 1 .5.5V6h2.5a.5.5 0 0 1 0 1H7v2.5a.5.5 0 0 1-1 0V7H3.5a.5.5 0 0 1 0-1H6V3.5a.5.5 0 0 1 .5-.5"/></svg> Zoom In
-            </button>
-            <button id="zoom-out-btn" title="Zoom Out" class="control-button">
-                 <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11M13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0"/><path d="M10.344 11.742c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1 6.538 6.538 0 0 1-1.398 1.4z"/><path fill-rule="evenodd" d="M3 6.5a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5"/></svg> Zoom Out
-            </button>
+            <button id="zoom-in-btn" title="Zoom In" class="control-button"><svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11M13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0"/><path d="M10.344 11.742c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1 6.538 6.538 0 0 1-1.398 1.4z"/><path fill-rule="evenodd" d="M6.5 3a.5.5 0 0 1 .5.5V6h2.5a.5.5 0 0 1 0 1H7v2.5a.5.5 0 0 1-1 0V7H3.5a.5.5 0 0 1 0-1H6V3.5a.5.5 0 0 1 .5-.5"/></svg> Zoom In</button>
+            <button id="zoom-out-btn" title="Zoom Out" class="control-button"><svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11M13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0"/><path d="M10.344 11.742c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1 6.538 6.538 0 0 1-1.398 1.4z"/><path fill-rule="evenodd" d="M3 6.5a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5"/></svg> Zoom Out</button>
         </div>
-        
         <div class="control-button-group">
             <button id="view-front-btn" class="control-button">Front</button>
             <button id="view-angle-left-btn" class="control-button">Angle Left</button>
@@ -133,64 +71,61 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="feature-section">
-                <h3>Book Style</h3>
+                <h3>Book Appearance</h3>
                 <div class="input-group">
                     <label for="book-style">Style:</label>
-                    <select id="book-style">
-                        <option value="softcover">Softcover</option>
-                        <option value="hardcover">Hardcover</option>
-                    </select>
+                    <select id="book-style"><option value="softcover">Softcover</option><option value="hardcover">Hardcover</option></select>
+                </div>
+                <div class="input-group">
+                    <label for="cover-finish">Cover Finish:</label>
+                    <select id="cover-finish"><option value="matte">Matte</option><option value="glossy">Glossy</option></select>
+                </div>
+                <div class="input-group">
+                    <label for="spine-text">Spine Text (Optional):</label>
+                    <input type="text" id="spine-text" placeholder="Enter spine text">
+                </div>
+                 <div class="input-group">
+                    <input type="checkbox" id="use-page-count-thickness" checked>
+                    <label for="use-page-count-thickness">Use Page Count for Thickness</label>
                 </div>
             </div>
 
             <div class="feature-section">
-                <h3>Background</h3>
+                <h3>Scene & Export</h3>
                 <div class="input-group">
-                    <label for="bg-color">Solid Color:</label>
+                    <label for="bg-color">Background Color:</label>
                     <input type="color" id="bg-color" value="#f0f0f0">
                 </div>
                 <div class="input-group">
-                    <label for="bg-image-upload">Image (Optional):</label>
+                    <label for="bg-image-upload">Background Image (Optional):</label>
                     <input type="file" id="bg-image-upload" accept="image/*">
                 </div>
                  <div class="input-group">
                     <input type="checkbox" id="bg-transparent-export">
                     <label for="bg-transparent-export">Transparent BG (PNG Export)</label>
                 </div>
-            </div>
-        </div>
-
-        <div class="feature-section mt-4"> 
-            <h3>Lighting & Shadows</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="input-group">
+                 <div class="input-group">
                     <label for="lighting-preset">Lighting Preset:</label>
-                    <select id="lighting-preset">
-                        <option value="default">Default</option>
-                        <option value="studio">Studio</option>
-                        <option value="natural">Natural</option>
-                        <option value="dramatic">Dramatic</option>
-                    </select>
+                    <select id="lighting-preset"><option value="default">Default</option><option value="studio">Studio</option><option value="natural">Natural</option><option value="dramatic">Dramatic</option></select>
                 </div>
-                <div class="input-group flex items-center pt-4">
+                <div class="input-group flex items-center">
                     <input type="checkbox" id="enable-shadows">
                     <label for="enable-shadows" class="mb-0">Enable Shadows</label>
                 </div>
             </div>
         </div>
 
-
         <div class="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
             <h2 class="text-lg font-semibold text-gray-700 mb-3">Export Options</h2>
             <div class="flex flex-col sm:flex-row sm:items-end sm:space-x-4 space-y-3 sm:space-y-0">
                 <div class="flex-grow">
-                    <label for="resolution-multiplier" class="block mb-1 text-sm font-medium text-gray-900">Resolution Multiplier:</label>
+                    <label for="resolution-multiplier">Resolution Multiplier:</label>
                     <select id="resolution-multiplier" class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                        <option value="1">1x (Original)</option><option value="2">2x</option><option value="3">3x</option><option value="4">4x</option><option value="5">5x</option>
+                        <option value="1">1x</option><option value="2">2x</option><option value="3">3x</option><option value="4">4x</option><option value="5">5x</option>
                     </select>
                 </div>
-                <button id="export-png" class="w-full sm:w-auto bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2.5 px-4 rounded-lg transition duration-150 ease-in-out">Export as PNG</button>
-                <button id="export-jpg" class="w-full sm:w-auto bg-green-500 hover:bg-green-600 text-white font-semibold py-2.5 px-4 rounded-lg transition duration-150 ease-in-out">Export as JPG</button>
+                <button id="export-png" class="w-full sm:w-auto bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2.5 px-4 rounded-lg">Export as PNG</button>
+                <button id="export-jpg" class="w-full sm:w-auto bg-green-500 hover:bg-green-600 text-white font-semibold py-2.5 px-4 rounded-lg">Export as JPG</button>
             </div>
         </div>
         
@@ -203,21 +138,30 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 
     <script type="module">
-        // --- Global Variables ---
         let scene, camera, renderer, bookMesh, controls, groundMesh;
-        let ambientLight, mainLight, fillLight, backLight; // For lighting presets
+        let ambientLight, mainLight, fillLight, backLight;
         let currentLightingPreset = 'default';
         let currentBookStyle = 'softcover';
+        let currentCoverFinish = 'matte';
+        let currentSpineText = '';
+        let usePageCountThickness = true;
         let shadowsEnabled = false;
         let backgroundImageTexture = null;
+        let pdfPageCount = 0; // Store page count from PDF
+        let pdfAspectRatio = 1 / Math.sqrt(2); // Default A4-ish if no PDF
+        let pdfCoverUrl = null;
+        let pdfBackUrl = null;
+
 
         const canvasContainer = document.getElementById('canvas-container');
         const pdfUpload = document.getElementById('pdf-upload');
         const statusMessage = document.getElementById('status-message');
         const loader = document.getElementById('loader');
         
-        // UI Elements
         const bookStyleSelect = document.getElementById('book-style');
+        const coverFinishSelect = document.getElementById('cover-finish');
+        const spineTextInput = document.getElementById('spine-text');
+        const usePageCountThicknessCheckbox = document.getElementById('use-page-count-thickness');
         const bgColorPicker = document.getElementById('bg-color');
         const bgImageUpload = document.getElementById('bg-image-upload');
         const bgTransparentExportCheckbox = document.getElementById('bg-transparent-export');
@@ -231,56 +175,39 @@
         const zoomInButton = document.getElementById('zoom-in-btn');
         const zoomOutButton = document.getElementById('zoom-out-btn');
         const viewButtons = {
-            front: document.getElementById('view-front-btn'),
-            angleLeft: document.getElementById('view-angle-left-btn'),
-            angleRight: document.getElementById('view-angle-right-btn'),
-            top: document.getElementById('view-top-btn'),
+            front: document.getElementById('view-front-btn'), angleLeft: document.getElementById('view-angle-left-btn'),
+            angleRight: document.getElementById('view-angle-right-btn'), top: document.getElementById('view-top-btn'),
             back: document.getElementById('view-back-btn'),
         };
 
         const TEXTURE_MAX_DIMENSION = 1024; 
         const BOOK_ASPECT_RATIO_REFERENCE_HEIGHT = 10; 
         const DEFAULT_CAMERA_DISTANCE = 15;
+        const FIXED_BOOK_THICKNESS = BOOK_ASPECT_RATIO_REFERENCE_HEIGHT * 0.1; // For when not using page count
 
-        // --- Initialization ---
         function initThreeJS() {
             scene = new THREE.Scene();
             scene.background = new THREE.Color(bgColorPicker.value); 
-
             const aspectRatio = canvasContainer.clientWidth / canvasContainer.clientHeight;
             camera = new THREE.PerspectiveCamera(75, aspectRatio, 0.1, 1000);
-            
-            // Initialize renderer with alpha for transparency
             renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, alpha: true });
             renderer.setSize(canvasContainer.clientWidth, canvasContainer.clientHeight);
             renderer.setPixelRatio(window.devicePixelRatio); 
             canvasContainer.appendChild(renderer.domElement);
-
-            // Initial Lighting Setup (will be managed by applyLightingPreset)
             applyLightingPreset(currentLightingPreset);
-
-            // Ground Plane for Shadows (initially invisible if shadows are off)
             const groundGeometry = new THREE.PlaneGeometry(100, 100);
-            const groundMaterial = new THREE.ShadowMaterial({ opacity: 0.3 }); // Transparent material that only receives shadows
+            const groundMaterial = new THREE.ShadowMaterial({ opacity: 0.3 });
             groundMesh = new THREE.Mesh(groundGeometry, groundMaterial);
-            groundMesh.receiveShadow = true;
-            groundMesh.rotation.x = -Math.PI / 2;
-            groundMesh.position.y = -BOOK_ASPECT_RATIO_REFERENCE_HEIGHT / 2 - 0.5; // Position below where book will be
-            groundMesh.visible = false; // Initially hidden
-            scene.add(groundMesh);
-            
-            // Controls
+            groundMesh.receiveShadow = true; groundMesh.rotation.x = -Math.PI / 2;
+            groundMesh.position.y = -BOOK_ASPECT_RATIO_REFERENCE_HEIGHT / 2 - 0.5;
+            groundMesh.visible = false; scene.add(groundMesh);
             if (typeof THREE.OrbitControls !== 'function') {
-                console.error('THREE.OrbitControls not defined.');
-                statusMessage.textContent = "Error: Camera controls library not found.";
+                console.error('THREE.OrbitControls not defined.'); statusMessage.textContent = "Error: Camera controls missing.";
                 updateButtonStates(true); return; 
             }
             controls = new THREE.OrbitControls(camera, renderer.domElement);
-            controls.target.set(0, 0, 0);
-            controls.enableDamping = true; controls.dampingFactor = 0.05;
-            controls.minDistance = 2; controls.maxDistance = 60; 
-            controls.maxPolarAngle = Math.PI; controls.minPolarAngle = 0; 
-
+            controls.target.set(0,0,0); controls.enableDamping = true; controls.dampingFactor = 0.05;
+            controls.minDistance = 2; controls.maxDistance = 60; controls.maxPolarAngle = Math.PI; controls.minPolarAngle = 0; 
             setCameraView(0, 5, DEFAULT_CAMERA_DISTANCE); 
             animate();
             window.addEventListener('resize', onWindowResize, false);
@@ -288,372 +215,300 @@
             setupEventListeners();
         }
 
-        function onWindowResize() { /* ... (same as before) ... */ 
-            if (!renderer || !camera || !canvasContainer) return;
-            if (canvasContainer.clientWidth === 0 || canvasContainer.clientHeight === 0) return;
-            const newWidth = canvasContainer.clientWidth;
-            const newHeight = canvasContainer.clientHeight;
-            camera.aspect = newWidth / newHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(newWidth, newHeight);
+        function onWindowResize() {
+            if (!renderer || !camera || !canvasContainer || canvasContainer.clientWidth === 0 || canvasContainer.clientHeight === 0) return;
+            const newWidth = canvasContainer.clientWidth; const newHeight = canvasContainer.clientHeight;
+            camera.aspect = newWidth / newHeight; camera.updateProjectionMatrix(); renderer.setSize(newWidth, newHeight);
         }
-        async function getPageAsImageDataUrl(pdfPage) { /* ... (same as before) ... */ 
+        async function getPageAsImageDataUrl(pdfPage) {
             const viewport = pdfPage.getViewport({ scale: 1 });
             const scale = Math.min(TEXTURE_MAX_DIMENSION / viewport.width, TEXTURE_MAX_DIMENSION / viewport.height, 1.5);
             const scaledViewport = pdfPage.getViewport({ scale: scale });
             const tempCanvas = document.createElement('canvas');
-            tempCanvas.width = scaledViewport.width;
-            tempCanvas.height = scaledViewport.height;
+            tempCanvas.width = scaledViewport.width; tempCanvas.height = scaledViewport.height;
             const context = tempCanvas.getContext('2d');
             await pdfPage.render({ canvasContext: context, viewport: scaledViewport }).promise;
             return { url: tempCanvas.toDataURL(), aspectRatio: scaledViewport.width / scaledViewport.height };
         }
 
-        // --- PDF Processing & Book Creation ---
         async function handlePDFUpload(event) {
             const file = event.target.files[0];
             if (!file) return;
-            statusMessage.textContent = 'Processing PDF...';
-            loader.classList.remove('hidden');
-            updateButtonStates(true); 
-
-            if (bookMesh) {
-                scene.remove(bookMesh);
-                if (bookMesh.geometry) bookMesh.geometry.dispose();
-                if (Array.isArray(bookMesh.material)) bookMesh.material.forEach(m => { if(m.map) m.map.dispose(); m.dispose(); });
-                else if (bookMesh.material) { if(bookMesh.material.map) bookMesh.material.map.dispose(); bookMesh.material.dispose(); }
-                bookMesh = null;
-            }
-
+            statusMessage.textContent = 'Processing PDF...'; loader.classList.remove('hidden'); updateButtonStates(true); 
+            if (bookMesh) { scene.remove(bookMesh); /* ... dispose geometry/materials ... */ bookMesh = null; }
             try {
                 const arrayBuffer = await file.arrayBuffer();
                 const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
                 if (pdf.numPages === 0) throw new Error("PDF has no pages.");
-
+                pdfPageCount = pdf.numPages;
                 const firstPage = await pdf.getPage(1);
-                const { url: coverImageDataUrl, aspectRatio: pageAspectRatio } = await getPageAsImageDataUrl(firstPage);
-                let backCoverImageDataUrl = coverImageDataUrl; 
+                const firstPageData = await getPageAsImageDataUrl(firstPage);
+                pdfCoverUrl = firstPageData.url;
+                pdfAspectRatio = firstPageData.aspectRatio;
+                pdfBackUrl = pdfCoverUrl; 
                 if (pdf.numPages > 1) {
-                    try {
-                        const lastPage = await pdf.getPage(pdf.numPages);
-                        backCoverImageDataUrl = (await getPageAsImageDataUrl(lastPage)).url;
-                    } catch (e) { console.warn("Could not process last page for back cover.", e); }
+                    try { const lastPage = await pdf.getPage(pdf.numPages); pdfBackUrl = (await getPageAsImageDataUrl(lastPage)).url; }
+                    catch (e) { console.warn("Could not process last page.", e); }
                 }
-                
-                createBook(coverImageDataUrl, backCoverImageDataUrl, pdf.numPages, pageAspectRatio);
-                statusMessage.textContent = 'PDF processed. Ready to customize and export.';
-                setCameraView(0, 5, DEFAULT_CAMERA_DISTANCE);
-                updateButtonStates(false); 
+                rebuildBook(); // Use a new function to handle book creation/recreation
+                statusMessage.textContent = 'PDF processed. Ready to customize.';
+                setCameraView(0, 5, DEFAULT_CAMERA_DISTANCE); updateButtonStates(false); 
             } catch (error) {
-                console.error('Error processing PDF:', error);
-                statusMessage.textContent = `Error: ${error.message || 'Could not process PDF.'}`;
-                if (bookMesh) scene.remove(bookMesh);
-                updateButtonStates(true); 
-            } finally {
-                loader.classList.add('hidden');
-            }
+                console.error('Error processing PDF:', error); statusMessage.textContent = `Error: ${error.message || 'PDF processing failed.'}`;
+                if (bookMesh) scene.remove(bookMesh); updateButtonStates(true); 
+            } finally { loader.classList.add('hidden'); }
         }
+
+        function createSpineTexture(text, bookHeightPx, bookThicknessPx) {
+            if (!text.trim()) return null; // No texture if no text
+
+            const canvas = document.createElement('canvas');
+            // Dimensions for spine texture: Height should be proportional to book height, width to thickness
+            // For vertical text, swap width/height logic for drawing.
+            // Let's make canvas height match book height, and width match book thickness for simplicity of drawing.
+            // The actual texture mapping will stretch this. We need a high-resolution canvas for clarity.
+            const textureHeight = 512; // Fixed texture height for spine text clarity
+            const textureWidth = Math.max(64, textureHeight * (bookThicknessPx / bookHeightPx)); // Proportional width, min 64px
+            
+            canvas.width = textureWidth;
+            canvas.height = textureHeight;
+            
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#FFF8E7'; // Page color for spine background
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.font = `bold ${Math.floor(textureHeight / (text.length > 15 ? 20 : 15) )}px Arial`; // Dynamic font size
+            ctx.fillStyle = '#333333'; // Dark text color
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+
+            // Rotate for vertical text
+            ctx.translate(canvas.width / 2, canvas.height / 2);
+            ctx.rotate(Math.PI / 2); 
+            ctx.fillText(text, 0, 0);
+            
+            const texture = new THREE.CanvasTexture(canvas);
+            texture.colorSpace = THREE.SRGBColorSpace;
+            return texture;
+        }
+        
+        function rebuildBook() {
+            if (!pdfCoverUrl) return; // Need at least a cover to build
+
+            if (bookMesh) {
+                scene.remove(bookMesh);
+                if (bookMesh.geometry) bookMesh.geometry.dispose();
+                if (Array.isArray(bookMesh.material)) {
+                    bookMesh.material.forEach(m => { if(m.map) m.map.dispose(); m.dispose(); });
+                } else if (bookMesh.material) {
+                    if(bookMesh.material.map) bookMesh.material.map.dispose();
+                    bookMesh.material.dispose();
+                }
+                bookMesh = null;
+            }
+            createBook(pdfCoverUrl, pdfBackUrl, pdfPageCount, pdfAspectRatio);
+        }
+
 
         function createBook(coverTextureUrl, backCoverTextureUrl, numPages, pageAspectRatio) {
             const bookHeight = BOOK_ASPECT_RATIO_REFERENCE_HEIGHT;
             const bookWidth = bookHeight * pageAspectRatio;
-            
-            // Adjust thickness based on book style
-            let bookThicknessFactor = currentBookStyle === 'hardcover' ? 0.30 : 0.25;
-            const bookThickness = Math.max(currentBookStyle === 'hardcover' ? 0.4 : 0.3, Math.min(numPages / 80, bookHeight * bookThicknessFactor)); 
+            let bookThickness;
+
+            if (usePageCountThicknessCheckbox.checked) {
+                let bookThicknessFactor = currentBookStyle === 'hardcover' ? 0.30 : 0.25;
+                bookThickness = Math.max(currentBookStyle === 'hardcover' ? 0.4 : 0.3, Math.min(numPages / 80, bookHeight * bookThicknessFactor));
+            } else {
+                bookThickness = FIXED_BOOK_THICKNESS;
+            }
 
             const textureLoader = new THREE.TextureLoader();
-            const coverTexture = textureLoader.load(coverTextureUrl, t => { if (bookMesh && bookMesh.material[4].map) bookMesh.material[4].map.needsUpdate = true; });
-            coverTexture.colorSpace = THREE.SRGBColorSpace;
-            const backTexture = textureLoader.load(backCoverTextureUrl, t => { if (bookMesh && bookMesh.material[5].map) bookMesh.material[5].map.needsUpdate = true; });
-            backTexture.colorSpace = THREE.SRGBColorSpace;
+            const coverTexture = textureLoader.load(coverTextureUrl); coverTexture.colorSpace = THREE.SRGBColorSpace;
+            const backTexture = textureLoader.load(backCoverTextureUrl); backTexture.colorSpace = THREE.SRGBColorSpace;
 
-            const frontCoverMaterial = new THREE.MeshStandardMaterial({ map: coverTexture, roughness: 0.7, metalness: 0.1 });
-            const backCoverMaterial = new THREE.MeshStandardMaterial({ map: backTexture, roughness: 0.7, metalness: 0.1 }); 
+            let roughnessValue = 0.7, metalnessValue = 0.1; // Default (Matte)
+            if (currentCoverFinish === 'glossy') {
+                roughnessValue = 0.2; metalnessValue = 0.3;
+            }
+
+            const frontCoverMaterial = new THREE.MeshStandardMaterial({ map: coverTexture, roughness: roughnessValue, metalness: metalnessValue });
+            const backCoverMaterial = new THREE.MeshStandardMaterial({ map: backTexture, roughness: roughnessValue, metalness: metalnessValue }); 
             const pageMaterial = new THREE.MeshStandardMaterial({ color: 0xfff8e7, roughness: 0.9, side: THREE.DoubleSide });
+            
+            // Spine Material
+            const spineTexture = createSpineTexture(currentSpineText, bookHeight, bookThickness);
+            const spineMaterial = spineTexture ? new THREE.MeshStandardMaterial({ map: spineTexture, roughness: roughnessValue, metalness: metalnessValue }) : pageMaterial;
 
-            const materials = [pageMaterial, pageMaterial, pageMaterial, pageMaterial, frontCoverMaterial, backCoverMaterial];
+            // BoxGeometry faces are: px, nx, py, ny, pz, nz (Right, Left, Top, Bottom, Front, Back)
+            // Spine is typically the 'left' face (nx) when book is closed and front is pz.
+            const materials = [
+                pageMaterial,       // Right (+X)
+                spineMaterial,      // Left (-X) - This is our spine
+                pageMaterial,       // Top (+Y)
+                pageMaterial,       // Bottom (-Y)
+                frontCoverMaterial, // Front (+Z)
+                backCoverMaterial   // Back (-Z)
+            ];
+
             const bookGeometry = new THREE.BoxGeometry(bookWidth, bookHeight, bookThickness);
             bookMesh = new THREE.Mesh(bookGeometry, materials);
             bookMesh.position.set(0,0,0); 
-            
-            // Shadow properties for the book
-            bookMesh.castShadow = shadowsEnabled;
-            bookMesh.receiveShadow = shadowsEnabled; // Can be true if other objects might cast on it
-
+            bookMesh.castShadow = shadowsEnabled; bookMesh.receiveShadow = shadowsEnabled;
             scene.add(bookMesh);
-            groundMesh.position.y = -bookHeight / 2 - 0.1; // Adjust ground plane based on book height
+            groundMesh.position.y = -bookHeight / 2 - 0.1;
         }
         
-        // --- Feature Controls ---
-        function handleBookStyleChange() {
-            currentBookStyle = bookStyleSelect.value;
-            if (bookMesh) { // Recreate book with new style if one exists
-                const oldPdfData = { // Need to "remember" or re-fetch PDF data. This is a simplification.
-                    cover: bookMesh.material[4].map ? bookMesh.material[4].map.image.src : null,
-                    back: bookMesh.material[5].map ? bookMesh.material[5].map.image.src : null,
-                    pages: 100, // Placeholder - ideally, store this from original PDF
-                    aspect: bookMesh.geometry.parameters.width / bookMesh.geometry.parameters.height
-                };
-                scene.remove(bookMesh); // Remove old book
-                createBook(oldPdfData.cover, oldPdfData.back, oldPdfData.pages, oldPdfData.aspect);
-            }
-        }
+        function handleBookStyleChange() { currentBookStyle = bookStyleSelect.value; rebuildBook(); }
+        function handleCoverFinishChange() { currentCoverFinish = coverFinishSelect.value; rebuildBook(); }
+        function handleSpineTextChange() { currentSpineText = spineTextInput.value; rebuildBook(); }
+        function handleThicknessOptionChange() { usePageCountThickness = usePageCountThicknessCheckbox.checked; rebuildBook(); }
 
         function handleBgColorChange() {
-            if (backgroundImageTexture) { // If there's an image, color is secondary or ignored
-                // Potentially clear image if color is picked? Or let image take precedence.
-                // For now, image takes precedence.
-                console.log("Background image is set. Color picker will not override image background.");
-                return;
-            }
+            if (backgroundImageTexture) { console.log("BG image set, color picker won't override."); return; }
             scene.background = new THREE.Color(bgColorPicker.value);
         }
-
         function handleBgImageUpload(event) {
             const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     const textureLoader = new THREE.TextureLoader();
-                    backgroundImageTexture = textureLoader.load(e.target.result, () => {
-                        scene.background = backgroundImageTexture;
-                    });
+                    backgroundImageTexture = textureLoader.load(e.target.result, () => scene.background = backgroundImageTexture);
                     backgroundImageTexture.colorSpace = THREE.SRGBColorSpace;
                 }
                 reader.readAsDataURL(file);
-            } else { // No file selected, or cleared
-                backgroundImageTexture = null;
-                scene.background = new THREE.Color(bgColorPicker.value); // Revert to color
-            }
+            } else { backgroundImageTexture = null; scene.background = new THREE.Color(bgColorPicker.value); }
         }
         
         function applyLightingPreset(presetName) {
             currentLightingPreset = presetName;
-            // Clear existing dynamic lights
-            if (ambientLight) scene.remove(ambientLight);
-            if (mainLight) scene.remove(mainLight);
-            if (fillLight) scene.remove(fillLight);
-            if (backLight) scene.remove(backLight);
-
-            ambientLight = new THREE.AmbientLight(0xffffff, 0.5); // Base ambient light
-            scene.add(ambientLight);
-
+            if (ambientLight) scene.remove(ambientLight); if (mainLight) scene.remove(mainLight);
+            if (fillLight) scene.remove(fillLight); if (backLight) scene.remove(backLight);
+            ambientLight = new THREE.AmbientLight(0xffffff, 0.5); scene.add(ambientLight);
             switch (presetName) {
-                case 'studio':
+                case 'studio': /* ... studio lights ... */ 
                     ambientLight.intensity = 0.4;
-                    mainLight = new THREE.SpotLight(0xffffff, 0.8, 50, Math.PI / 6, 0.5, 1);
-                    mainLight.position.set(10, 15, 10);
-                    fillLight = new THREE.SpotLight(0xffddcc, 0.5, 50, Math.PI / 7, 0.7, 1);
-                    fillLight.position.set(-10, 10, 10);
-                    backLight = new THREE.DirectionalLight(0xccddff, 0.3);
-                    backLight.position.set(0, 5, -15);
-                    scene.add(mainLight, fillLight, backLight);
-                    break;
-                case 'natural':
+                    mainLight = new THREE.SpotLight(0xffffff, 0.8, 50, Math.PI / 6, 0.5, 1); mainLight.position.set(10, 15, 10);
+                    fillLight = new THREE.SpotLight(0xffddcc, 0.5, 50, Math.PI / 7, 0.7, 1); fillLight.position.set(-10, 10, 10);
+                    backLight = new THREE.DirectionalLight(0xccddff, 0.3); backLight.position.set(0, 5, -15);
+                    scene.add(mainLight, fillLight, backLight); break;
+                case 'natural': /* ... natural lights ... */ 
                     ambientLight.intensity = 0.6;
-                    mainLight = new THREE.DirectionalLight(0xffefd5, 0.9); // Sun-like
-                    mainLight.position.set(15, 20, 10);
-                    scene.add(mainLight);
-                    break;
-                case 'dramatic':
+                    mainLight = new THREE.DirectionalLight(0xffefd5, 0.9); mainLight.position.set(15, 20, 10);
+                    scene.add(mainLight); break;
+                case 'dramatic': /* ... dramatic lights ... */ 
                     ambientLight.intensity = 0.2;
-                    mainLight = new THREE.SpotLight(0xffffff, 1.2, 60, Math.PI / 8, 0.2, 1);
-                    mainLight.position.set(5, 10, 15);
-                    fillLight = new THREE.PointLight(0x5555ff, 0.5, 30); // Cool fill
-                    fillLight.position.set(-10, 5, -5);
-                    scene.add(mainLight, fillLight);
-                    break;
-                case 'default':
-                default:
-                    ambientLight.intensity = 0.7;
-                    mainLight = new THREE.DirectionalLight(0xffffff, 0.8);
-                    mainLight.position.set(5, 10, 7.5);
-                    scene.add(mainLight);
-                    break;
+                    mainLight = new THREE.SpotLight(0xffffff, 1.2, 60, Math.PI / 8, 0.2, 1); mainLight.position.set(5, 10, 15);
+                    fillLight = new THREE.PointLight(0x5555ff, 0.5, 30); fillLight.position.set(-10, 5, -5);
+                    scene.add(mainLight, fillLight); break;
+                default: ambientLight.intensity = 0.7;
+                    mainLight = new THREE.DirectionalLight(0xffffff, 0.8); mainLight.position.set(5, 10, 7.5);
+                    scene.add(mainLight); break;
             }
             updateShadowsOnLights();
         }
-
         function handleShadowToggle() {
-            shadowsEnabled = enableShadowsCheckbox.checked;
-            renderer.shadowMap.enabled = shadowsEnabled;
-            if (bookMesh) {
-                bookMesh.castShadow = shadowsEnabled;
-                bookMesh.receiveShadow = shadowsEnabled; // Or false if it shouldn't receive from itself
-            }
-            groundMesh.visible = shadowsEnabled; // Show/hide ground plane with shadows
-            updateShadowsOnLights();
-            if(renderer) renderer.render(scene, camera); // Force re-render
+            shadowsEnabled = enableShadowsCheckbox.checked; renderer.shadowMap.enabled = shadowsEnabled;
+            if (bookMesh) { bookMesh.castShadow = shadowsEnabled; bookMesh.receiveShadow = shadowsEnabled; }
+            groundMesh.visible = shadowsEnabled; updateShadowsOnLights();
+            if(renderer) renderer.render(scene, camera);
         }
-        
         function updateShadowsOnLights() {
-            const lightsToUpdate = [mainLight, fillLight, backLight].filter(l => l); // Get existing lights
-            lightsToUpdate.forEach(light => {
-                if (light.isDirectionalLight || light.isSpotLight || light.isPointLight) { // PointLight shadows are expensive
+            [mainLight, fillLight, backLight].filter(l => l).forEach(light => {
+                if (light.isDirectionalLight || light.isSpotLight || light.isPointLight) {
                     light.castShadow = shadowsEnabled;
                     if (shadowsEnabled) {
-                        light.shadow.mapSize.width = 1024; // or 2048 for better quality
-                        light.shadow.mapSize.height = 1024;
-                        light.shadow.camera.near = 0.5;
-                        light.shadow.camera.far = light.isPointLight ? light.distance || 50 : 500; // PointLight needs distance
-                        if(light.isSpotLight) light.shadow.bias = -0.0001; // Adjust bias to prevent shadow acne
+                        light.shadow.mapSize.width = 1024; light.shadow.mapSize.height = 1024;
+                        light.shadow.camera.near = 0.5; light.shadow.camera.far = light.isPointLight ? light.distance || 50 : 500;
+                        if(light.isSpotLight) light.shadow.bias = -0.0001; 
                     }
                 }
             });
         }
 
-
-        // --- Export Functionality ---
         function exportScene(format = 'png', userSelectedMultiplier = 1) {
-            if (!bookMesh || !renderer || !scene || !camera) { /* ... */ return; }
+            if (!bookMesh) return;
             const actualRenderMultiplier = userSelectedMultiplier * 2; 
-            statusMessage.textContent = `Exporting ${format.toUpperCase()} at ${userSelectedMultiplier}x quality...`; 
-            loader.classList.remove('hidden');
-            updateButtonStates(true);
-
-            // Handle transparent background for PNG
-            let originalSceneBackground = scene.background;
-            let originalRendererClearAlpha = renderer.getClearAlpha();
+            statusMessage.textContent = `Exporting ${format.toUpperCase()} at ${userSelectedMultiplier}x...`; 
+            loader.classList.remove('hidden'); updateButtonStates(true);
+            let originalSceneBackground = scene.background; let originalRendererClearAlpha = renderer.getClearAlpha();
             const isTransparentExport = format === 'png' && bgTransparentExportCheckbox.checked;
-
-            if (isTransparentExport) {
-                scene.background = null; // Necessary for transparent background
-                renderer.setClearAlpha(0); // Set renderer to clear to transparent
-            }
-
-
+            if (isTransparentExport) { scene.background = null; renderer.setClearAlpha(0); }
             setTimeout(() => {
                 try {
-                    const originalWidth = canvasContainer.clientWidth;
-                    const originalHeight = canvasContainer.clientHeight;
-                    const exportWidth = originalWidth * actualRenderMultiplier;
-                    const exportHeight = originalHeight * actualRenderMultiplier;
-                    const originalAspect = camera.aspect;
-                    const originalPixelRatio = renderer.getPixelRatio();
-
-                    renderer.setPixelRatio(1); 
-                    renderer.setSize(exportWidth, exportHeight, false); 
-                    camera.aspect = exportWidth / exportHeight;
-                    camera.updateProjectionMatrix();
-                    if(controls) controls.update(); 
-                    renderer.render(scene, camera); 
-
+                    const originalWidth = canvasContainer.clientWidth, originalHeight = canvasContainer.clientHeight;
+                    const exportWidth = originalWidth * actualRenderMultiplier, exportHeight = originalHeight * actualRenderMultiplier;
+                    const originalAspect = camera.aspect, originalPixelRatio = renderer.getPixelRatio();
+                    renderer.setPixelRatio(1); renderer.setSize(exportWidth, exportHeight, false); 
+                    camera.aspect = exportWidth / exportHeight; camera.updateProjectionMatrix();
+                    if(controls) controls.update(); renderer.render(scene, camera); 
                     const mimeType = format === 'png' ? 'image/png' : 'image/jpeg';
                     const imageDataUrl = renderer.domElement.toDataURL(mimeType, format === 'jpeg' ? 0.92 : undefined);
-
-                    renderer.setPixelRatio(originalPixelRatio);
-                    renderer.setSize(originalWidth, originalHeight, false);
-                    camera.aspect = originalAspect;
-                    camera.updateProjectionMatrix();
-                    
-                    // Restore background and clear alpha
-                    if (isTransparentExport) {
-                        scene.background = originalSceneBackground;
-                        renderer.setClearAlpha(originalRendererClearAlpha);
-                    }
-
-                    if(controls) controls.update(); 
-                    renderer.render(scene, camera); // Re-render for display
-
-                    const link = document.createElement('a');
-                    link.href = imageDataUrl;
+                    renderer.setPixelRatio(originalPixelRatio); renderer.setSize(originalWidth, originalHeight, false);
+                    camera.aspect = originalAspect; camera.updateProjectionMatrix();
+                    if (isTransparentExport) { scene.background = originalSceneBackground; renderer.setClearAlpha(originalRendererClearAlpha); }
+                    if(controls) controls.update(); renderer.render(scene, camera); 
+                    const link = document.createElement('a'); link.href = imageDataUrl;
                     link.download = `book-mockup-${Date.now()}.${format === 'jpeg' ? 'jpg' : 'png'}`;
                     document.body.appendChild(link); link.click(); document.body.removeChild(link);
-                    statusMessage.textContent = `Exported successfully at ${userSelectedMultiplier}x quality!`;
+                    statusMessage.textContent = `Exported successfully at ${userSelectedMultiplier}x!`;
                 } catch (e) {
-                    console.error("Export failed:", e);
-                    statusMessage.textContent = `Export failed: ${e.message}. Try a lower resolution.`;
-                    // Restore background and clear alpha on error too
-                    if (isTransparentExport) {
-                        scene.background = originalSceneBackground;
-                        renderer.setClearAlpha(originalRendererClearAlpha);
-                    }
-                    // ... (restore renderer size as before)
-                } finally {
-                    loader.classList.add('hidden');
-                    updateButtonStates(bookMesh === null); 
-                }
+                    console.error("Export failed:", e); statusMessage.textContent = `Export failed: ${e.message}.`;
+                    if (isTransparentExport) { scene.background = originalSceneBackground; renderer.setClearAlpha(originalRendererClearAlpha); }
+                } finally { loader.classList.add('hidden'); updateButtonStates(bookMesh === null); }
             }, 50); 
         }
 
-        function setCameraView(x, y, z, lookAtX = 0, lookAtY = 0, lookAtZ = 0) { /* ... (same as before) ... */ 
-            if (!camera || !controls) return;
-            camera.position.set(x, y, z);
-            controls.target.set(lookAtX, lookAtY, lookAtZ);
-            camera.lookAt(controls.target); 
-            controls.update();
-        }
-        function updateButtonStates(isProcessingOrError = false) { /* ... (same as before) ... */ 
-            const bookExists = !!bookMesh;
-            const controlsExist = !!controls;
+        function setCameraView(x,y,z,lx=0,ly=0,lz=0) { if(!camera||!controls)return; camera.position.set(x,y,z); controls.target.set(lx,ly,lz); camera.lookAt(controls.target); controls.update(); }
+        function updateButtonStates(isProcessingOrError = false) {
+            const bookExists = !!bookMesh; const controlsExist = !!controls;
             const disableAllInteractive = isProcessingOrError || !bookExists || !controlsExist;
             exportPNGButton.disabled = disableAllInteractive; exportJPGButton.disabled = disableAllInteractive;
             zoomInButton.disabled = disableAllInteractive; zoomOutButton.disabled = disableAllInteractive;
             Object.values(viewButtons).forEach(btn => btn.disabled = disableAllInteractive);
-            // Also disable feature controls if no book or during processing
-            bookStyleSelect.disabled = disableAllInteractive;
-            bgColorPicker.disabled = isProcessingOrError || !controlsExist; // Allow BG change even without book
-            bgImageUpload.disabled = isProcessingOrError || !controlsExist;
+            bookStyleSelect.disabled = disableAllInteractive; coverFinishSelect.disabled = disableAllInteractive;
+            spineTextInput.disabled = disableAllInteractive; usePageCountThicknessCheckbox.disabled = disableAllInteractive;
+            bgColorPicker.disabled = isProcessingOrError || !controlsExist; bgImageUpload.disabled = isProcessingOrError || !controlsExist;
             bgTransparentExportCheckbox.disabled = isProcessingOrError || !controlsExist;
-            lightingPresetSelect.disabled = disableAllInteractive;
-            enableShadowsCheckbox.disabled = disableAllInteractive;
+            lightingPresetSelect.disabled = disableAllInteractive; enableShadowsCheckbox.disabled = disableAllInteractive;
         }
-        function animate() { /* ... (same as before) ... */ 
-            requestAnimationFrame(animate);
-            if (controls) controls.update(); 
-            if (renderer && scene && camera) renderer.render(scene, camera);
-        }
-
-        function manualDollyZoom(zoomIn) { /* ... (same as before) ... */ 
-            if (!controls || !camera) { console.error("Cannot zoom."); return; }
-            const toCamera = new THREE.Vector3().subVectors(camera.position, controls.target);
-            const currentDistance = toCamera.length();
-            let newDistance = zoomIn ? Math.max(controls.minDistance, currentDistance * 0.85) : Math.min(controls.maxDistance, currentDistance * 1.15);
-            if (currentDistance.toFixed(5) === newDistance.toFixed(5)) return;
-            toCamera.setLength(newDistance);
-            camera.position.copy(controls.target).add(toCamera);
-            controls.update();
+        function animate() { requestAnimationFrame(animate); if(controls)controls.update(); if(renderer&&scene&&camera)renderer.render(scene,camera); }
+        function manualDollyZoom(zoomIn) {
+            if(!controls||!camera)return; const vec=new THREE.Vector3().subVectors(camera.position,controls.target);
+            const dist=vec.length(); let newDist=zoomIn?Math.max(controls.minDistance,dist*0.85):Math.min(controls.maxDistance,dist*1.15);
+            if(dist.toFixed(5)===newDist.toFixed(5))return; vec.setLength(newDist); camera.position.copy(controls.target).add(vec); controls.update();
         }
 
-        // --- Setup Event Listeners for new controls ---
         function setupEventListeners() {
             pdfUpload.addEventListener('change', handlePDFUpload);
-            exportPNGButton.addEventListener('click', () => exportScene('png', parseFloat(resolutionMultiplierSelect.value)));
-            exportJPGButton.addEventListener('click', () => exportScene('jpeg', parseFloat(resolutionMultiplierSelect.value)));
-            zoomInButton.addEventListener('click', () => manualDollyZoom(true));
-            zoomOutButton.addEventListener('click', () => manualDollyZoom(false));
-
-            viewButtons.front.addEventListener('click', () => setCameraView(0, 0, DEFAULT_CAMERA_DISTANCE));
-            viewButtons.angleLeft.addEventListener('click', () => setCameraView(-DEFAULT_CAMERA_DISTANCE * 0.7, DEFAULT_CAMERA_DISTANCE * 0.5, DEFAULT_CAMERA_DISTANCE * 0.7));
-            viewButtons.angleRight.addEventListener('click', () => setCameraView(DEFAULT_CAMERA_DISTANCE * 0.7, DEFAULT_CAMERA_DISTANCE * 0.5, DEFAULT_CAMERA_DISTANCE * 0.7));
-            viewButtons.top.addEventListener('click', () => setCameraView(0, DEFAULT_CAMERA_DISTANCE, 0.01));
-            viewButtons.back.addEventListener('click', () => setCameraView(0, 0, -DEFAULT_CAMERA_DISTANCE));
-
-            // New feature listeners
+            exportPNGButton.addEventListener('click',()=>exportScene('png',parseFloat(resolutionMultiplierSelect.value)));
+            exportJPGButton.addEventListener('click',()=>exportScene('jpeg',parseFloat(resolutionMultiplierSelect.value)));
+            zoomInButton.addEventListener('click',()=>manualDollyZoom(true)); zoomOutButton.addEventListener('click',()=>manualDollyZoom(false));
+            viewButtons.front.addEventListener('click',()=>setCameraView(0,0,DEFAULT_CAMERA_DISTANCE));
+            viewButtons.angleLeft.addEventListener('click',()=>setCameraView(-DEFAULT_CAMERA_DISTANCE*0.7,DEFAULT_CAMERA_DISTANCE*0.5,DEFAULT_CAMERA_DISTANCE*0.7));
+            viewButtons.angleRight.addEventListener('click',()=>setCameraView(DEFAULT_CAMERA_DISTANCE*0.7,DEFAULT_CAMERA_DISTANCE*0.5,DEFAULT_CAMERA_DISTANCE*0.7));
+            viewButtons.top.addEventListener('click',()=>setCameraView(0,DEFAULT_CAMERA_DISTANCE,0.01));
+            viewButtons.back.addEventListener('click',()=>setCameraView(0,0,-DEFAULT_CAMERA_DISTANCE));
             bookStyleSelect.addEventListener('change', handleBookStyleChange);
-            bgColorPicker.addEventListener('input', handleBgColorChange); // 'input' for live update
+            coverFinishSelect.addEventListener('change', handleCoverFinishChange);
+            spineTextInput.addEventListener('input', handleSpineTextChange); // Use 'input' for live-ish update
+            usePageCountThicknessCheckbox.addEventListener('change', handleThicknessOptionChange);
+            bgColorPicker.addEventListener('input', handleBgColorChange); 
             bgImageUpload.addEventListener('change', handleBgImageUpload);
-            lightingPresetSelect.addEventListener('change', (e) => applyLightingPreset(e.target.value));
+            lightingPresetSelect.addEventListener('change',(e)=>applyLightingPreset(e.target.value));
             enableShadowsCheckbox.addEventListener('change', handleShadowToggle);
         }
 
-
-        // --- Start ---
         document.addEventListener('DOMContentLoaded', () => {
-            if (canvasContainer.clientWidth > 0 && canvasContainer.clientHeight > 0) {
-                initThreeJS();
-            } else {
-                console.warn("Canvas container zero dimensions. Deferred init.");
-                setTimeout(() => {
+            if (canvasContainer.clientWidth > 0 && canvasContainer.clientHeight > 0) initThreeJS();
+            else { console.warn("Canvas no dimensions. Deferred init."); setTimeout(() => {
                      if (canvasContainer.clientWidth > 0 && canvasContainer.clientHeight > 0) initThreeJS();
-                     else { console.error("Canvas container not sized."); statusMessage.textContent = "Error: Canvas not sized."; updateButtonStates(true); }
+                     else { console.error("Canvas not sized."); statusMessage.textContent = "Error: Canvas not sized."; updateButtonStates(true); }
                 }, 100);
             }
-            if (!statusMessage.textContent.startsWith("Error:")) statusMessage.textContent = 'Upload a PDF for mockup.';
+            if (!statusMessage.textContent.startsWith("Error:")) statusMessage.textContent = 'Upload PDF for mockup.';
             updateButtonStates(true); 
         });
-
     </script>
 </body>
 </html>
